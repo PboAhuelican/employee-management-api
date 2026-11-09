@@ -8,14 +8,20 @@ import com.pbo.exampleemployee.application.exception.EmployeeNotFoundException;
 import com.pbo.exampleemployee.domain.employee.model.Employee;
 import com.pbo.exampleemployee.domain.employee.model.Status;
 import com.pbo.exampleemployee.domain.employee.model.vo.*;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class EmployeeService implements EmployeeUseCase {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeService.class);
 
     private final EmployeeRepositoryPort employeeRepositoryPort;
 
@@ -39,8 +45,9 @@ public class EmployeeService implements EmployeeUseCase {
                 LocalDateTime.now(),
                 Status.ACTIVE
         );
-
         employeeRepositoryPort.save(employee);
+
+        LOGGER.info("create User {}", employee);
         return employee;
     }
 
@@ -50,6 +57,7 @@ public class EmployeeService implements EmployeeUseCase {
         List<Employee> employees = employeeRepositoryPort.findAll();
 
         if (employees.isEmpty()) {
+            LOGGER.warn("No exist employees");
             throw new EmployeeNotFoundException("No employees found");
         }
         return employees;

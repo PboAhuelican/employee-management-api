@@ -1,9 +1,12 @@
 package com.pbo.exampleemployee.interfaces.rest.common.exception;
 
+import com.pbo.exampleemployee.application.employee.service.EmployeeService;
 import com.pbo.exampleemployee.application.exception.EmployeeNotFoundException;
 import com.pbo.exampleemployee.domain.exception.DomainException;
 import com.pbo.exampleemployee.domain.exception.InvalidEmployeeDataException;
 import com.pbo.exampleemployee.interfaces.rest.common.response.ErrorResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -16,10 +19,12 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(EmployeeNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEmployeeNotFoundException(
             EmployeeNotFoundException exception) {
-
+        LOGGER.error("Unexpected error occurred", exception);
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
@@ -49,7 +54,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ErrorResponse> handleDomainException(
             DomainException exception) {
-
+        LOGGER.error("Error in DomainException {}", exception);
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
