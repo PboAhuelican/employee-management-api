@@ -103,7 +103,16 @@ public class EmployeeService implements EmployeeUseCase {
 
     @Override
     public List<Employee> searchEmployeesByName(String name) {
-        return employeeRepositoryPort.findByName(name);
+
+        List<Employee> employees =
+                employeeRepositoryPort.findByName(name);
+
+        if (employees.isEmpty()) {
+            throw new EmployeeNotFoundException(
+                    "No employees found matching the provided name: " + name
+            );
+        }
+        return employees;
     }
 
 }
