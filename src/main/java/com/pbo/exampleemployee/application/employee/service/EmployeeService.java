@@ -23,7 +23,7 @@ public class EmployeeService implements EmployeeUseCase {
         this.employeeRepositoryPort = employeeRepositoryPort;
     }
 
-    //
+
     @Override
     public Employee createEmployee(CreateEmployeeCommand command) {
         Employee employee = new Employee(
@@ -52,7 +52,7 @@ public class EmployeeService implements EmployeeUseCase {
         if (employees.isEmpty()) {
             throw new EmployeeNotFoundException("No employees found");
         }
-        return employeeRepositoryPort.findAll();
+        return employees;
     }
 
 
